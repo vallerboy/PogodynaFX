@@ -2,6 +2,8 @@ package pl.oskarpolak.weatherapp.controllers;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -38,20 +40,28 @@ public class StatsController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-
-        XYChart.Series series1 = new XYChart.Series();
-        series1.setName("Pogoda");
-        series1.getData().add(new XYChart.Data("Warszawa", 20));
-        series1.getData().add(new XYChart.Data("Kraków", 34.4));
-        series1.getData().add(new XYChart.Data("Wrocław", 13));
-
-        chartWeather.getData().add(series1);
         registerButtonStatsAction();
         loadCityNames();
-
+        registerClickItemOnList();
     }
 
+    private void registerClickItemOnList(){
+        listOfCity.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            loadChart((String) newValue);
+        });
+    }
+
+    private void loadChart(String city) {
+        XYChart.Series series1 = new XYChart.Series();
+        series1.setName(city);
+        int counter = 0;
+        for (WeatherStat weatherStat : weatherStatDao.getLastSixStats(city)) {
+            series1.getData().add(new XYChart.Data("" + counter, weatherStat.getTemp()));
+            counter ++;
+        }
+        chartWeather.getData().clear();
+        chartWeather.getData().add(series1);
+    }
 
     private void loadCityNames(){
         listOfCity.setItems(FXCollections.observableList(weatherStatDao.getAllCities()));
