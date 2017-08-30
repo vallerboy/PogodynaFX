@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.oskarpolak.weatherapp.controllers.StatsController">
+   <children>
+      <JFXListView fx:id="listOfCity" prefHeight="400.0" prefWidth="158.0" />
+      <BarChart fx:id="chartWeather" barGap="5.0" layoutX="159.0" prefHeight="400.0" prefWidth="441.0" title="Pogoda">
+        <xAxis>
+          <CategoryAxis side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis side="LEFT" />
+        </yAxis>
+      </BarChart>
+      <JFXButton fx:id="buttonBack" layoutX="536.0" layoutY="20.0" style="-fx-background-color: grey;" text="Wróć" />
+   </children>
+</AnchorPane>
