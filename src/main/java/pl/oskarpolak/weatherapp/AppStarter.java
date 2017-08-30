@@ -18,7 +18,7 @@ public class AppStarter extends Application{
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("main.fxml"));
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("stats.fxml"));
         primaryStage.setTitle("Pogodynka");
         primaryStage.setScene(new Scene(root, 600, 400));
         primaryStage.setResizable(false);
