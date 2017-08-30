@@ -2,6 +2,7 @@ package pl.oskarpolak.weatherapp.controllers;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -9,6 +10,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.stage.Stage;
+import pl.oskarpolak.weatherapp.model.WeatherStat;
+import pl.oskarpolak.weatherapp.model.dao.WeatherStatDao;
+import pl.oskarpolak.weatherapp.model.dao.impl.WeatherStatDaoImpl;
+import pl.oskarpolak.weatherapp.model.utils.DatabaseConnector;
 
 import java.io.IOException;
 import java.net.URL;
@@ -27,6 +32,8 @@ public class StatsController implements Initializable{
     @FXML
     JFXButton buttonBack;
 
+    private DatabaseConnector databaseConnector = DatabaseConnector.getInstance();
+    private WeatherStatDao weatherStatDao = new WeatherStatDaoImpl();
 
 
     @Override
@@ -41,9 +48,14 @@ public class StatsController implements Initializable{
 
         chartWeather.getData().add(series1);
         registerButtonStatsAction();
+        loadCityNames();
 
     }
 
+
+    private void loadCityNames(){
+        listOfCity.setItems(FXCollections.observableList(weatherStatDao.getAllCities()));
+    }
 
     private void registerButtonStatsAction() {
         buttonBack.setOnMouseClicked(e -> {
