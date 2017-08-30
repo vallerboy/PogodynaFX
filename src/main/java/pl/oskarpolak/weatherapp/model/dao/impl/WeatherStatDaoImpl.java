@@ -44,7 +44,7 @@ public class WeatherStatDaoImpl implements WeatherStatDao {
             preparedStatement.setString(1, cityname);
             ResultSet resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
-                weatherStat = new WeatherStat(resultSet.getString("cityname"), resultSet.getInt("temp"));
+                weatherStat = new WeatherStat(resultSet.getString("cityname"), resultSet.getFloat("temp"));
                 weatherStatList.add(weatherStat);
             }
             resultSet.close();
@@ -59,13 +59,15 @@ public class WeatherStatDaoImpl implements WeatherStatDao {
     public List<String> getAllCities() {
         List<String> cities = new ArrayList<>();
         PreparedStatement preparedStatement = databaseConnector.getNewPreparedStatement(
-                "SELECT cityname FROM weather"
+                "SELECT DISTINCT cityname FROM weather"
         );
         try {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()){
                 cities.add(resultSet.getString("cityname"));
             }
+            resultSet.close();
+            preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

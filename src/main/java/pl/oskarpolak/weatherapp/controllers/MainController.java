@@ -12,8 +12,12 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import pl.oskarpolak.weatherapp.model.WeatherData;
+import pl.oskarpolak.weatherapp.model.WeatherStat;
+import pl.oskarpolak.weatherapp.model.dao.WeatherStatDao;
+import pl.oskarpolak.weatherapp.model.dao.impl.WeatherStatDaoImpl;
 import pl.oskarpolak.weatherapp.model.service.IWeatherObserver;
 import pl.oskarpolak.weatherapp.model.service.WeatherService;
+import pl.oskarpolak.weatherapp.model.utils.DatabaseConnector;
 
 import java.io.IOException;
 import java.net.URL;
@@ -39,14 +43,19 @@ public class MainController implements IWeatherObserver, Initializable{
     @FXML
     JFXButton buttonStats;
 
+    private String lastCityName;
+
 
 
     private WeatherService weatherService = WeatherService.getService();
+    private DatabaseConnector databaseConnector = DatabaseConnector.getInstance();
+    private WeatherStatDao weatherStatDao = new WeatherStatDaoImpl();
 
 
 
     @Override
     public void onWeatherUpdate(WeatherData data) {
+        weatherStatDao.saveStat(new WeatherStat(lastCityName, (float) data.getTemp()));
         textInfo.setText("Temp: " + data.getTemp());
         progressLoad.setVisible(false);
     }
@@ -86,6 +95,7 @@ public class MainController implements IWeatherObserver, Initializable{
     }
 
     private void prepareRequestAndClear() {
+        lastCityName = textCity.getText();
         progressLoad.setVisible(true);
         weatherService.init(textCity.getText());
         textCity.clear();
